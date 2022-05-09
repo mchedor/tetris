@@ -17,6 +17,11 @@ class Pixel:
 
     def set_color(self,color):
         self.color = (255,0,0)
+    def set_coordp(self,x,y):
+        self.xp=x
+        self.yp=y
+        self.x=x*32+32
+        self.y=y*32+32
     def get_coordp(self):
         return (self.x,self.y)
     def set_draw(self,x,y):

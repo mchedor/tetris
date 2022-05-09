@@ -16,8 +16,8 @@ red=(255,0,0)
 
 
 cuvette=[[0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0],
+        [1,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,1],
@@ -51,7 +51,7 @@ pygame.display.flip()
 montps=time.time()
 ev=[]
 
-
+touche_enfoncer={"s":False,"q":False,"d":False}
 mouvement=""
 #Boucle infinie
 while continuer:
@@ -61,28 +61,29 @@ while continuer:
         #print(event)
         elif event.type == pygame.KEYDOWN:  #une touche a été pressée...laquelle ?
             if event.key == pygame.K_DOWN:
-                mouvement+="s"
+                touche_enfoncer["s"]=True
             if event.key == pygame.K_LEFT:
-                mouvement+="q"
+                touche_enfoncer["q"]=True
             if event.key == pygame.K_RIGHT:
-                mouvement+="d"
+                touche_enfoncer["d"]=True
+        elif event.type == pygame.KEYUP:  #une touche a été pressée...laquelle ?
+            if event.key == pygame.K_DOWN:
+                touche_enfoncer["s"]=False
+            if event.key == pygame.K_LEFT:
+                touche_enfoncer["q"]=False
+            if event.key == pygame.K_RIGHT:
+                touche_enfoncer["d"]=False
         if event:
             ev.append(event)
 
+    if touche_enfoncer:
+        if touche_enfoncer["s"]:
+            mouvement+="s"
+        if touche_enfoncer["q"]:
+            mouvement+="q"
+        if touche_enfoncer["d"]:
+           mouvement+="d"
 
-    if time.time()-montps>=1:
-        #on defini un tic
-        montps=time.time()
-        mouvement+="s"
-
-        print("\n",ev)
-        ev=[]
-        for i in cuvette_obj_piece:
-            #on draw la cuvette a chaque tique
-            for j in i:
-                if j:
-                    j.draw()
-        pygame.display.flip()
 
     if mouvement:
         posibilite_move=piece.movetesting(cuvette_obj_piece)
@@ -96,7 +97,26 @@ while continuer:
             pygame.display.flip()
             mouvement=""
 
-    time.sleep(0.01)
+    if time.time()-montps>=0.7:
+        #on defini un tic
+        montps=time.time()
+        if piece.movetesting(cuvette_obj_piece)["s"]:
+            mouvement+="s"
+        else:
+            cuvette_obj_piece[piece.yp][piece.xp]=tp.Pixel(fenetre,2,"piecemorte",color=piece.color,x=piece.xp,y=piece.yp)
+            cuvette_obj_piece[piece.yp][piece.xp].draw()
+            piece.set_coordp(4,1)
+        print("\n",ev)
+        ev=[]
+        for i in cuvette_obj_piece:
+            #on draw la cuvette a chaque tique
+            for j in i:
+                if j:
+                    j.draw()
+        pygame.display.flip()
+
+
+    time.sleep(0.1)
 
 
 pygame.quit()
