@@ -37,12 +37,16 @@ class Pixel:
             print(self.x,self.y)
         if r:
             print(self.x,self.y)
+    def destroy(self,r=False):
+        self.draw(color=(0,0,0),r=r)
 
     def __repr__(self):
-        return self.id
+        return str(self.id)
 
     def __str__(self):
         return self.name
+    def __int__(self):
+        return self.id
 
 
 class Piece(Pixel):

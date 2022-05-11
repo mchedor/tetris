@@ -51,6 +51,7 @@ pygame.display.flip()
 montps=time.time()
 ev=[]
 
+ligne=False
 touche_enfoncer={"s":False,"q":False,"d":False}
 mouvement=""
 #Boucle infinie
@@ -114,6 +115,39 @@ while continuer:
                 if j:
                     j.draw()
         pygame.display.flip()
+
+
+        for i in range(len(cuvette_obj_piece)-1):
+            if not 0 in cuvette_obj_piece[i]:
+                ligne=i
+                print(cuvette_obj_piece[i])
+        if ligne:
+            for i in cuvette_obj_piece[ligne]:
+                if int(i)==2:
+                    i.destroy()
+                else:
+                    print(int(i))
+                pygame.display.flip()
+                time.sleep(0.1)
+            cuvette_obj_piece.insert(1,[cuvette_obj_piece[ligne][0]]+[i*0 for i in range(len(cuvette_obj_piece[ligne])-2)]+[cuvette_obj_piece[ligne][-1]])
+            print(cuvette_obj_piece.pop(ligne+1))
+
+            print(cuvette_obj_piece)
+            print()
+            print("c",cuvette_obj_piece[ligne])
+            ligne=False
+            xh,yh=fenetre.get_size()
+            pygame.draw.rect(fenetre, (0,0,0), pygame.Rect(0, 0, xh, yh))#font d'ecran
+            for i in range(len(cuvette_obj_piece)):
+            #on draw la cuvette a chaque tique
+                for j in range(len(cuvette_obj_piece[i])):
+                    if cuvette_obj_piece[i][j]:
+                        #print("hhh",int(cuvette_obj_piece[i][j]))
+                        cuvette_obj_piece[i][j].set_coordp(j,i)
+                        cuvette_obj_piece[i][j].draw()
+            pygame.display.flip()
+            #print("l",len(cuvette_obj_piece))
+
 
 
     time.sleep(0.1)
