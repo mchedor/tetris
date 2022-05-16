@@ -87,16 +87,20 @@ while continuer:
 
 
     if mouvement:
-        posibilite_move=piece.movetesting(cuvette_obj_piece)
-        mouvement2=""
-        for i in mouvement:
-            if posibilite_move[i]:
-                mouvement2+=i
 
-        if mouvement2:
-            piece.move(mouvement2)
-            pygame.display.flip()
-            mouvement=""
+        posibilite_move=piece.movetesting(cuvette_obj_piece)
+        print("mouv ",mouvement)
+        print("poss ",posibilite_move)
+        for i in mouvement:
+
+            if posibilite_move[i]:
+                piece.move(i)
+                posibilite_move=piece.movetesting(cuvette_obj_piece)
+            print("poss ",posibilite_move)
+
+
+        pygame.display.flip()
+        mouvement=""
 
     if time.time()-montps>=0.7:
         #on defini un tic
@@ -104,8 +108,11 @@ while continuer:
         if piece.movetesting(cuvette_obj_piece)["s"]:
             mouvement+="s"
         else:
-            cuvette_obj_piece[piece.yp][piece.xp]=tp.Pixel(fenetre,2,"piecemorte",color=piece.color,x=piece.xp,y=piece.yp)
-            cuvette_obj_piece[piece.yp][piece.xp].draw()
+            print("I died my piece",piece.xp,piece.yp)
+            piece.move("s")
+            cuvette_obj_piece[piece.yp-1][piece.xp]=tp.Pixel(fenetre,2,"piecemorte",color=piece.color,x=piece.xp,y=piece.yp-1)
+            cuvette_obj_piece[piece.yp-1][piece.xp].draw(r=True)
+            piece.draw(color=(0,0,0))
             piece.set_coordp(4,1)
         print("\n",ev)
         ev=[]
@@ -152,5 +159,5 @@ while continuer:
 
     time.sleep(0.1)
 
-
+print("\n".join([str(i) for i in cuvette_obj_piece]))
 pygame.quit()
