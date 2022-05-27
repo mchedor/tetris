@@ -5,8 +5,8 @@ import tetris_piece as tp
 import time
 
 
-x=8
-y=16
+x=10
+y=22
 xp=x*32+32
 yp=y*32+32
 pygame.init()
@@ -15,22 +15,26 @@ continuer = 1
 red=(255,0,0)
 
 
-cuvette=[[0,0,0,0,0,0,0,0,0],
-        [1,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,1],
-        [1,1,1,1,1,1,1,1,1]]
+cuvette=[[1,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,1],
+        [1,1,1,1,1,1,1,1,1,1,1]]
 cuvette_obj_piece=[]
 for i in range(len(cuvette)):
     cuvette_obj_piece.append([])
@@ -44,7 +48,7 @@ for i in range(len(cuvette)):
             cuvette_obj_piece[i].append(0)
 
 
-piece=tp.Piece(fenetre,8,"piece",color=(0,255,0),x=4,y=1)
+piece=tp.Barre(fenetre,8,"piece",color=(0,255,0),x=4,y=1)
 piece.draw()
 
 pygame.display.flip()
@@ -67,6 +71,10 @@ while continuer:
                 touche_enfoncer["q"]=True
             if event.key == pygame.K_RIGHT:
                 touche_enfoncer["d"]=True
+            if event.key == pygame.K_UP:
+                mouvement+="o"
+            if event.key == pygame.K_SPACE:
+                print("SPACE   SPACE   SPACE   SPACE   SPACE  ")
         elif event.type == pygame.KEYUP:  #une touche a été pressée...laquelle ?
             if event.key == pygame.K_DOWN:
                 touche_enfoncer["s"]=False
@@ -74,6 +82,7 @@ while continuer:
                 touche_enfoncer["q"]=False
             if event.key == pygame.K_RIGHT:
                 touche_enfoncer["d"]=False
+
         if event:
             ev.append(event)
 
@@ -86,16 +95,25 @@ while continuer:
            mouvement+="d"
 
 
-    if mouvement:
 
-        posibilite_move=piece.movetesting(cuvette_obj_piece)
+    if mouvement:
+        print("      MOUVEMENT",mouvement)
+        try:
+            posibilite_move=piece.movetesting(cuvette_obj_piece)
+        except IndexError:
+            print("ERROR : ")
+            posibilite_move={"s":False,"q":False,"d":False,"o":piece.rotation_testing(cuvette_obj_piece)}
         print("mouv ",mouvement)
         print("poss ",posibilite_move)
         for i in mouvement:
 
             if posibilite_move[i]:
                 piece.move(i)
-                posibilite_move=piece.movetesting(cuvette_obj_piece)
+                try:
+                    posibilite_move=piece.movetesting(cuvette_obj_piece)
+                except IndexError:
+                    print("ERROR : ")
+                    posibilite_move={"s":False,"q":False,"d":False,"o":piece.rotation_testing(cuvette_obj_piece)}
             print("poss ",posibilite_move)
 
 
@@ -110,8 +128,13 @@ while continuer:
         else:
             print("I died my piece",piece.xp,piece.yp)
             piece.move("s")
-            cuvette_obj_piece[piece.yp-1][piece.xp]=tp.Pixel(fenetre,2,"piecemorte",color=piece.color,x=piece.xp,y=piece.yp-1)
-            cuvette_obj_piece[piece.yp-1][piece.xp].draw(r=True)
+            coords=piece.coordsIdShape(1,11)
+            coord=[j for i in coords for j in coords[i]]
+            for i in range(len(coord)):
+                if coord[i]:
+                    x,y=coord[i]
+                cuvette_obj_piece[y-1][x]=tp.Pixel(fenetre,2,"piecemorte",color=piece.color,x=x,y=y-1)
+                cuvette_obj_piece[y-1][x].draw(r=True)
             piece.draw(color=(0,0,0))
             piece.set_coordp(4,1)
         print("\n",ev)
@@ -135,7 +158,7 @@ while continuer:
                 else:
                     print(int(i))
                 pygame.display.flip()
-                time.sleep(0.1)
+                time.sleep(0.05)
             cuvette_obj_piece.insert(1,[cuvette_obj_piece[ligne][0]]+[i*0 for i in range(len(cuvette_obj_piece[ligne])-2)]+[cuvette_obj_piece[ligne][-1]])
             print(cuvette_obj_piece.pop(ligne+1))
 
@@ -154,7 +177,6 @@ while continuer:
                         cuvette_obj_piece[i][j].draw()
             pygame.display.flip()
             #print("l",len(cuvette_obj_piece))
-
 
 
     time.sleep(0.1)
