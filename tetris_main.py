@@ -1,6 +1,7 @@
 # Créé par mchedor, le 25/04/2022 en Python 3.7
 import pygame
 from pygame.locals import *
+from random import *
 import tetris_piece as tp
 import time
 
@@ -9,14 +10,18 @@ x=10
 y=22
 xp=x*32+32
 yp=y*32+32
+HAUT_DE_CUVETTE=2
 pygame.init()
 fenetre = pygame.display.set_mode((xp+32*2, yp+32*2))
 continuer = 1
-red=(255,0,0)
+COLOR_CUVETTE=(127, 127, 127)
+#pieces=("""tp.Barre(fenetre,8,"piece",x=4,y=1)""","""tp.Carre(fenetre,8,"piece",x=4,y=1)""")
+
+pieces=("""tp.Piece_S(fenetre,8,"piece",x=4,y=1)""","""tp.Carre(fenetre,8,"piece",x=4,y=1)""")
 
 
-cuvette=[[1,0,0,0,0,0,0,0,0,0,1],
-        [1,0,0,0,0,0,0,0,0,0,1],
+cuvette=[[0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0],
         [1,0,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,1],
         [1,0,0,0,0,0,0,0,0,0,1],
@@ -41,14 +46,25 @@ for i in range(len(cuvette)):
     for j in range(len(cuvette[i])):
         if cuvette[i][j]:
             print("i,j:",i,j,end='__')
-            cuvette_obj_piece[i].append(tp.Pixel(fenetre,1,"cuvette",color=red,x=j,y=i))
+            cuvette_obj_piece[i].append(tp.Pixel(fenetre,1,"cuvette",color=COLOR_CUVETTE,x=j,y=i))
             cuvette_obj_piece[i][j].draw()
             print("x,y",cuvette_obj_piece[i][j].get_coordp())
         else:
             cuvette_obj_piece[i].append(0)
 
 
-piece=tp.Barre(fenetre,8,"piece",color=(0,255,0),x=4,y=1)
+
+def choicePiece():
+    global piece
+    piece=eval(pieces[randint(0,len(pieces))-1])
+    """
+    pieces2=tuple(pieces)
+    global piece
+    piece=pieces2[randint(0,len(pieces))-1]
+    """
+    return piece
+
+piece=choicePiece()
 piece.draw()
 
 pygame.display.flip()
@@ -58,8 +74,9 @@ ev=[]
 ligne=False
 touche_enfoncer={"s":False,"q":False,"d":False}
 mouvement=""
+fin=False
 #Boucle infinie
-while continuer:
+while continuer and fin==False:
     for event in pygame.event.get():
         if event.type == QUIT:
             continuer = 0
@@ -135,8 +152,9 @@ while continuer:
                     x,y=coord[i]
                 cuvette_obj_piece[y-1][x]=tp.Pixel(fenetre,2,"piecemorte",color=piece.color,x=x,y=y-1)
                 cuvette_obj_piece[y-1][x].draw(r=True)
-            piece.draw(color=(0,0,0))
-            piece.set_coordp(4,1)
+            piece=choicePiece()
+            #piece.draw(color=(0,0,0))
+            #piece.set_coordp(4,1)
         print("\n",ev)
         ev=[]
         for i in cuvette_obj_piece:
@@ -159,7 +177,7 @@ while continuer:
                     print(int(i))
                 pygame.display.flip()
                 time.sleep(0.05)
-            cuvette_obj_piece.insert(1,[cuvette_obj_piece[ligne][0]]+[i*0 for i in range(len(cuvette_obj_piece[ligne])-2)]+[cuvette_obj_piece[ligne][-1]])
+            cuvette_obj_piece.insert(HAUT_DE_CUVETTE,[cuvette_obj_piece[ligne][0]]+[i*0 for i in range(len(cuvette_obj_piece[ligne])-2)]+[cuvette_obj_piece[ligne][-1]])
             print(cuvette_obj_piece.pop(ligne+1))
 
             print(cuvette_obj_piece)
@@ -177,7 +195,8 @@ while continuer:
                         cuvette_obj_piece[i][j].draw()
             pygame.display.flip()
             #print("l",len(cuvette_obj_piece))
-
+    if [True for i,x in enumerate(cuvette_obj_piece[1]) if x]:
+        fin=True
 
     time.sleep(0.1)
 

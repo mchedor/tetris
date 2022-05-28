@@ -3,6 +3,15 @@ import pygame
 from pygame.locals import *
 import time
 
+COLOR_BARRE=(0, 255, 255)#blue sky
+COLOR_CARRE=(255, 255, 0)#yellow
+COLOR_S=(255, 0, 0)#red
+COLOR_Z=(0, 255, 0)#green
+COLOR_L=(255, 127, 0)#orange
+COLOR_J=(0, 0, 255)#blue
+COLOR_T=(128, 0, 128)#purple
+
+
 class Pixel:
     def __init__(self,surface,id,name,color=(1,1,1),x=0,y=0,debug=0):
         self.debug=debug
@@ -11,9 +20,9 @@ class Pixel:
         self.id=int(id)
         self.xp=x
         self.yp=y
-        self.color = color
         self.x=x*32+32
         self.y=y*32+32
+        self.color=color
         self.surface=surface
 
     def set_color(self,color):
@@ -66,13 +75,17 @@ class Piece(Pixel):
                         #10 = gauche(q)
                         #20 = droite(d)
         # _1 = hitbox de la piece
+    def direction_coords(self):
+        coordss=self.coordsIdShape(10,20,00)
+        gauches,droites,bas=coordss[10],coordss[20],coordss[00]
+        return (gauches,droites,bas)
 
     def movetesting(self,table):
         try:
             print("\n\nmovetseting_debut")
             direction="sqd"#fleme de modifier donc c'est un copier coller
             coordss=self.coordsIdShape(10,20,00)
-            gauches,droites,bas=coordss[10],coordss[20],coordss[00]
+            gauches,droites,bas=self.direction_coords()
             print(coordss)
             if "s" in direction:
                 s=[]
@@ -178,15 +191,16 @@ class Piece(Pixel):
 
 
 class Carre(Piece):
-    def __init__(self,surface,id,name,color=(1,1,1),x=0,y=0,debug=0):
+    def __init__(self,surface,id,name,color=COLOR_CARRE,x=0,y=0,debug=0):
         super().__init__(surface,id,name,color,x,y,debug)
         self.shape= [[10,11,1,20],
                 [10,11,11,20],
                 [-1,00,00,-1],]
 
 class Barre(Piece):
-    def __init__(self,surface,id,name,color=(1,1,1),x=0,y=0,debug=0):
+    def __init__(self,surface,id,name,color=COLOR_BARRE,x=0,y=0,debug=0):
         super().__init__(surface,id,name,color,x,y,debug)
+
         self.shape= [[10,11,20],
                      [10,11,20],
                      [10, 1,20],
@@ -347,7 +361,108 @@ class Barre(Piece):
             self.shapeNumber=len(self.shapes)-1
         print("shapeNumber_2",self.shapeNumber)
 
+class Piece_S(Barre):
+    def __init__(self,surface,id,name,color=COLOR_S,x=0,y=0,debug=0):
+        super().__init__(surface,id,name,color,x,y,debug)
 
+        self.shape= [[-1,10, 1,11,20],
+                     [10,11,11,22,-1],
+                     [-1,00,00,-1,-1],]
+        self.shapes=[[[10,11,20,-1],
+                      [10,11, 1,20],
+                      [-1,12,11,20],
+                      [-1,-1,00,-1],],
+
+                     [[-1,10, 1,11,20],
+                      [10,11,11,22,-1],
+                      [-1,00,00,-1,-1],],
+
+                     [[10,11,20,-1],
+                      [10,11, 1,20],
+                      [-1,12,11,20],
+                      [-1,-1,00,-1],],
+
+                     [[-1,10, 1,11,20],
+                      [10,11,11,22,-1],
+                      [-1,00,00,-1,-1],],]
+        self.shapes_alternative=[[[[10,11,20,-1],
+                      [10,11, 1,20],
+                      [-1,12,11,20],
+                      [-1,-1,00,-1],],
+
+                     [[10,11,20,-1],
+                      [10,1, 11,20],
+                      [-1,12,11,20],
+                      [-1,-1,00,-1],],
+
+                     [[10,1,20,-1],
+                      [10,11, 11,20],
+                      [-1,12,11,20],
+                      [-1,-1,00,-1],],
+
+                     [[10,11,20,-1],
+                      [10,11,11,20],
+                      [-1,12, 1,20],
+                      [-1,-1,00,-1],]],
+
+                     [[[-1,10, 1,11,20],
+                      [10,11,11,22,-1],
+                      [-1,00,00,-1,-1]],
+
+                     [[-1,10, 11, 1,20],
+                      [10,11,11,22,-1],
+                      [-1,00,00,-1,-1]],
+
+                     [[-1,10, 11,11,20],
+                      [10,11, 1,22,-1],
+                      [-1,00,00,-1,-1]],
+
+                     [[-1,10, 11,11,20],
+                      [10, 1,11,22,-1],
+                      [-1,00,00,-1,-1],]],
+
+                     [[[10,11,20,-1],
+                      [10,11, 1,20],
+                      [-1,12,11,20],
+                      [-1,-1,00,-1],],
+
+                     [[10,11,20,-1],
+                      [10,1, 11,20],
+                      [-1,12,11,20],
+                      [-1,-1,00,-1],],
+
+                     [[10,1,20,-1],
+                      [10,11, 11,20],
+                      [-1,12,11,20],
+                      [-1,-1,00,-1],],
+
+                     [[10,11,20,-1],
+                      [10,11,11,20],
+                      [-1,12, 1,20],
+                      [-1,-1,00,-1],]],
+
+                     [[[-1,10, 1,11,20],
+                      [10,11,11,22,-1],
+                      [-1,00,00,-1,-1],],
+
+                     [[-1,10, 11, 1,20],
+                      [10,11,11,22,-1],
+                      [-1,00,00,-1,-1],],
+
+                     [[-1,10, 11,11,20],
+                      [10,11, 1,22,-1],
+                      [-1,00,00,-1,-1],],
+
+                     [[-1,10, 11,11,20],
+                      [10, 1,11,22,-1],
+                      [-1,00,00,-1,-1],]],]
+        self.shapeNumber=1
+        self.shape_result=self.shape
+    
+    def direction_coords(self):
+        coordss=self.coordsIdShape(10,20,00,22,12)
+        gauches,droites,bas=coordss[10]+coordss[12],coordss[20]+coordss[22],coordss[00]+coordss[22]+coordss[12]
+        return (gauches,droites,bas)
 
 
 
