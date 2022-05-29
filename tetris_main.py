@@ -15,9 +15,9 @@ pygame.init()
 fenetre = pygame.display.set_mode((xp+32*2, yp+32*2))
 continuer = 1
 COLOR_CUVETTE=(127, 127, 127)
-#pieces=("""tp.Barre(fenetre,8,"piece",x=4,y=1)""","""tp.Carre(fenetre,8,"piece",x=4,y=1)""","""tp.Piece_S(fenetre,8,"piece",x=4,y=1)""","""tp.Piece_Z(fenetre,8,"piece",x=4,y=1)""")
+pieces=("""tp.Barre(fenetre,8,"piece",x=4,y=1)""","""tp.Carre(fenetre,8,"piece",x=4,y=1)""","""tp.Piece_S(fenetre,8,"piece",x=4,y=1)""","""tp.Piece_Z(fenetre,8,"piece",x=4,y=1)""")
 
-pieces=("""tp.Piece_J(fenetre,8,"piece",x=4,y=1)""","""tp.Piece_J(fenetre,8,"piece",x=4,y=1)""")
+#pieces=("""tp.Piece_J(fenetre,8,"piece",x=4,y=1)""","""tp.Piece_J(fenetre,8,"piece",x=4,y=1)""")
 
 
 cuvette=[[0,0,0,0,0,0,0,0,0,0,0],
