@@ -353,7 +353,23 @@ class Barre(Piece):
         #print("o  o o o o o o o o o o o o o o o o o o o o o o o o")
         self.shapeNumber_increment(1)
         self.shape=self.shape_result
+        self.translation_coord_shape()
 
+    def translation_coord_shape(self):
+        coord_shapeAlt=[(j,i) for i,x in enumerate(self.shape) for j,x2 in enumerate(x) if x2==1][0]
+        coord_shapeClean=[(j,i) for i,x in enumerate(self.shapes[self.shapeNumber]) for j,x2 in enumerate(x) if x2==1][0]
+        print(self.shape)
+        print(self.shapes[self.shapeNumber])
+        print(coord_shapeAlt)
+        print(coord_shapeClean)
+        x=coord_shapeAlt[0]-coord_shapeClean[0]
+        y=coord_shapeAlt[1]-coord_shapeClean[1]
+        print(x,y)
+        self.xp=self.xp-x
+        self.yp=self.yp-y
+        self.x-=x*32
+        self.y-=y*32
+        self.shape=self.shapes[self.shapeNumber]
     def shapeNumber_increment(self,num):
         #print(self.shape)
         #print("shapeNumber_1",self.shapeNumber)
@@ -668,7 +684,7 @@ class Piece_L(Piece_Z):
 
 
 class Piece_J(Piece_Z):
-    def __init__(self,surface,id,name,color=COLOR_L,x=0,y=0,debug=0):
+    def __init__(self,surface,id,name,color=COLOR_J,x=0,y=0,debug=0):
         super().__init__(surface,id,name,color,x,y,debug)
 
         self.shape= [[-1,10,11,20],
@@ -767,7 +783,7 @@ class Piece_J(Piece_Z):
         self.shape_result=self.shape
 
 class Piece_T(Piece_Z):
-    def __init__(self,surface,id,name,color=COLOR_L,x=0,y=0,debug=0):
+    def __init__(self,surface,id,name,color=COLOR_T,x=0,y=0,debug=0):
         super().__init__(surface,id,name,color,x,y,debug)
 
         self.shape= [[10,11,20,-1],
