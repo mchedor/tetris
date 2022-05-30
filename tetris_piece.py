@@ -46,7 +46,8 @@ class Pixel:
         #pygame.draw.rect(self.surface, (0,0,0), pygame.Rect(self.x, self.y, 32, 32))
         pygame.draw.rect(self.surface, color, pygame.Rect(self.x+2, self.y+32+2, 32-2, 32-2))
         if self.debug==2:
-            print(self.x,self.y)
+            #print(self.x,self.y)
+            pass
         if r:
             print(self.x,self.y)
     def destroy(self,r=False):
@@ -82,16 +83,16 @@ class Piece(Pixel):
 
     def movetesting(self,table):
         try:
-            print("\n\nmovetseting_debut")
+            #print("\n\nmovetseting_debut")
             direction="sqd"#fleme de modifier donc c'est un copier coller
             coordss=self.coordsIdShape(10,20,00)
             gauches,droites,bas=self.direction_coords()
-            print(coordss)
+            #print(coordss)
             if "s" in direction:
                 s=[]
-                print("bas  bas",bas)
+                #print("bas  bas",bas)
                 for i in bas:
-                    print("table",table[i[1]][i[0]],"xy",repr(table[i[1]][i[0]]))
+                    #print("table",table[i[1]][i[0]],"xy",repr(table[i[1]][i[0]]))
                     if table[i[1]][i[0]]:
                         #print("probleme?",table[i[0]][i[1]])
                         s.append(False)
@@ -129,10 +130,10 @@ class Piece(Pixel):
                     d=True
 
         except IndexError as err:
-            print("IndexError: {0}".format(err))
-            print("ERROR : ")
+            #print("IndexError: {0}".format(err))
+            #print("ERROR : ")
             return {"s":False,"q":False,"d":False,"o":self.rotation_testing(table)}
-        print({"s":s,"q":q,"d":d,"o":self.rotation_testing(table)})
+        #print({"s":s,"q":q,"d":d,"o":self.rotation_testing(table)})
         return {"s":s,"q":q,"d":d,"o":self.rotation_testing(table)}
 
 
@@ -152,13 +153,13 @@ class Piece(Pixel):
             self.rotation()
         if draw:
             self.draw(r=True)
-        print("\t\t   movemove xy",self.xp,self.yp)
+        #print("\t\t   movemove xy",self.xp,self.yp)
     def draw(self,color=(),r=False):
         if not color:
             color=self.color
         #pygame.draw.rect(self.surface, (0,0,0), pygame.Rect(self.x, self.y, 32, 32))
         coords=self.coordsIdShape(1,11)
-        print(coords)
+        #print(coords)
         coord=[j for i in coords for j in coords[i]]
         for i in range(len(coord)):
             if coord[i]:
@@ -166,9 +167,11 @@ class Piece(Pixel):
 
             pygame.draw.rect(self.surface, color, pygame.Rect(x*32+2+32, y*32+32+2, 32-2, 32-2))
             if self.debug==2:
-                print(self.x/32,self.y/32)
+                #print(self.x/32,self.y/32)
+                pass
             if r:
-                print("R",x,y)
+                #print("R",x,y)
+                pass
 
     def coordsIdShape(self,*ids,table=False,xt=0,yt=0):
         if not yt and not xt:
@@ -297,7 +300,7 @@ class Barre(Piece):
         self.shapeNumber=1
         self.shape_result=self.shape
     def rotation_testing(self,table):
-        print("shape actual",self.shape)
+        #print("shape actual",self.shape)
         xt,yt=self.xp,self.yp
         o=False
         finich=False
@@ -305,10 +308,10 @@ class Barre(Piece):
         STOP=0
         alt=0
         while ((not o and (alt<4)) and ((finich==False) and (STOP<10))):
-            print("coord centre xy",self.xp,self.yp)
-            print("           while",STOP)
+            #print("coord centre xy",self.xp,self.yp)
+            #print("           while",STOP)
             rotation_testing_shape=self.shapes_alternative[self.shapeNumber][alt]
-            print("rotation_testing_shape /_\\",rotation_testing_shape)
+            #print("rotation_testing_shape /_\\",rotation_testing_shape)
             o=[]
             STOP+=1
             coordsst=self.coordsIdShape(11,1,table=rotation_testing_shape)
@@ -318,48 +321,48 @@ class Barre(Piece):
                 try:
 
                     if table[i[1]][i[0]] or i[1]<=0 or i[0]<=0:
-                        print("table rotation_testing",table[i[1]][i[0]],"xy",repr(table[i[1]][i[0]]))
+                        #print("table rotation_testing",table[i[1]][i[0]],"xy",repr(table[i[1]][i[0]]))
                         o.append(False)
                         problem.append(i)
                     else:
-                        print("table rotation_testing",table[i[1]][i[0]],"xy",repr(table[i[1]][i[0]]))
+                        #print("table rotation_testing",table[i[1]][i[0]],"xy",repr(table[i[1]][i[0]]))
                         o.append(True)
                 except IndexError:
                     o.append(False)
                     problem.append(i)
-            print("oo",o)
+            #print("oo",o)
             if False in o:
                 o=False
-                print("rotation_testing FALSE alt",alt)
+                #print("rotation_testing FALSE alt",alt)
                 #print(self.shapes_alternative[self.shapeNumber][alt])
                 alt+=1
 
             elif True in o:
                 o=True
                 self.shape_result=rotation_testing_shape
-                print("problem ??",coordsst)
-        print("'-'",self.shapeNumber)
-        print("nn",self.shapes_alternative[self.shapeNumber])
+                #print("problem ??",coordsst)
+        #print("'-'",self.shapeNumber)
+        #print("nn",self.shapes_alternative[self.shapeNumber])
         self.shapeNumber_increment(-1)
-        
-        print("FIN rotation_testing : ",alt,"\n\t\t       ",self.shape_result,"\n\t\t       ",self.coordsIdShape(11,1,table=self.shape_result))
+
+        #print("FIN rotation_testing : ",alt,"\n\t\t       ",self.shape_result,"\n\t\t       ",self.coordsIdShape(11,1,table=self.shape_result))
         return o
 
     def rotation(self):
 
-        print("o  o o o o o o o o o o o o o o o o o o o o o o o o")
+        #print("o  o o o o o o o o o o o o o o o o o o o o o o o o")
         self.shapeNumber_increment(1)
         self.shape=self.shape_result
 
     def shapeNumber_increment(self,num):
-        print(self.shape)
-        print("shapeNumber_1",self.shapeNumber)
+        #print(self.shape)
+        #print("shapeNumber_1",self.shapeNumber)
         self.shapeNumber+=num
         if self.shapeNumber==len(self.shapes):
             self.shapeNumber=0
         if self.shapeNumber<0:
             self.shapeNumber=len(self.shapes)-1
-        print("shapeNumber_2",self.shapeNumber)
+        #print("shapeNumber_2",self.shapeNumber)
 
 class Piece_S(Barre):
     def __init__(self,surface,id,name,color=COLOR_S,x=0,y=0,debug=0):
@@ -458,13 +461,13 @@ class Piece_S(Barre):
                       [-1,00,00,-1,-1],]],]
         self.shapeNumber=1
         self.shape_result=self.shape
-    
+
     def direction_coords(self):
         coordss=self.coordsIdShape(10,20,00,22,12)
         gauches,droites,bas=coordss[10]+coordss[12],coordss[20]+coordss[22],coordss[00]+coordss[22]+coordss[12]
         return (gauches,droites,bas)
 
-class Piece_Z(Barre):
+class Piece_Z(Piece_S):
     def __init__(self,surface,id,name,color=COLOR_Z,x=0,y=0,debug=0):
         super().__init__(surface,id,name,color,x,y,debug)
 
@@ -561,107 +564,102 @@ class Piece_Z(Barre):
                      [-1,-1,00,00,-1],],]]
         self.shapeNumber=1
         self.shape_result=self.shape
-    
-    def direction_coords(self):
-        coordss=self.coordsIdShape(10,20,00,22,12)
-        gauches,droites,bas=coordss[10]+coordss[12],coordss[20]+coordss[22],coordss[00]+coordss[22]+coordss[12]
-        return (gauches,droites,bas)
 
 
-class Piece_L(Barre):
+
+class Piece_L(Piece_Z):
     def __init__(self,surface,id,name,color=COLOR_L,x=0,y=0,debug=0):
         super().__init__(surface,id,name,color,x,y,debug)
 
         self.shape= [[10,11,20,-1],
-                     [10,11,20,-1],
-                     [10, 1,11,20],
+                     [10, 1,20,-1],
+                     [10,11,11,20],
                      [-1,00,00,-1],]
-        self.shapes=[[[10,11,20,-1,-1],
+        self.shapes=[[[-1,-1,10,11,20],
                       [10,11, 1,11,20],
                       [-1,00,00,00,-1]],
-
 
                      [[10,11,20,-1],
-                     [10,11,20,-1],
-                     [10, 1,11,20],
+                     [10, 1,20,-1],
+                     [10,11,11,20],
                      [-1,00,00,-1],],
 
-                     [[-1,-1,10,11,20],
-                      [10,11, 1,11,20],
-                      [-1,00,00,00,-1]],
+                     [[10,11, 1,11,20],
+                      [10,11,22,00,-1],
+                      [-1,00,-1,-1,-1]],
 
                      [[10,11,11,20],
-                     [-1,12,11,20],
-                     [-1,10, 1,20],
+                     [-1,12, 1,20],
+                     [-1,10,11,20],
                      [-1,-1,00,-1],],]
-        self.shapes_alternative=[[[[10,11,20,-1,-1],
+        self.shapes_alternative=[[[[-1,-1,10,11,20],
+                      [10, 1,11,11,20],
+                      [-1,00,00,00,-1]],
+
+                     [[-1,-1,10,11,20],
                       [10,11, 1,11,20],
                       [-1,00,00,00,-1]],
 
-                     [[10,11,20,-1,-1],
-                      [10,1, 11,11,20],
+                    [[-1,-1,10,11,20],
+                      [10,11,11, 1,20],
                       [-1,00,00,00,-1]],
 
-                     [[10,1,20,-1,-1],
-                      [10,11, 11,11,20],
-                      [-1,00,00,00,-1]],
+                     [[-1,-1,10, 1,20],
+                      [10,11,11,11,20],
+                      [-1,00,00,00,-1]],],
 
-                     [[10,11,20,-1,-1],
-                      [10,11, 11,1,20],
-                      [-1,00,00,00,-1]]],
+                    [[[10, 1,20,-1],
+                     [10,11,20,-1],
+                     [10,11,11,20],
+                     [-1,00,00,-1],],
 
-                    [[[10,11,20,-1],
+                    [[10,11,20,-1],
+                     [10, 1,20,-1],
+                     [10,11,11,20],
+                     [-1,00,00,-1],],
+
+                    [[10,11,20,-1],
                      [10,11,20,-1],
                      [10, 1,11,20],
                      [-1,00,00,-1],],
 
                     [[10,11,20,-1],
                      [10,11,20,-1],
-                     [10,11,1,20],
-                     [-1,00,00,-1],],
-
-                    [[10,11,20,-1],
-                     [10,1,20,-1],
-                     [10,11,11,20],
-                     [-1,00,00,-1],],
-
-                    [[10,1,20,-1],
-                     [10,11,20,-1],
-                     [10,11,11,20],
+                     [10,11, 1,20],
                      [-1,00,00,-1],],],
 
-                    [[[-1,-1,10,11,20],
-                      [10,11,1,11,20],
-                      [-1,00,00,00,-1]],
+                    [[[10,11,11, 1,20],
+                      [10,11,22,00,-1],
+                      [-1,00,-1,-1,-1]],
 
-                     [[-1,-1,10,11,20],
-                      [10,11,11,1,20],
-                      [-1,00,00,00,-1]],
+                     [[10,11, 1,11,20],
+                      [10,11,22,00,-1],
+                      [-1,00,-1,-1,-1]],
 
-                     [[-1,-1,10,1,20],
-                      [10,11,11,11,20],
-                      [-1,00,00,00,-1]],
+                     [[10, 1,11,11,20],
+                      [10,11,22,00,-1],
+                      [-1,00,-1,-1,-1]],
 
-                     [[-1,-1,10,11,20],
-                      [10,1,11,11,20],
-                      [-1,00,00,00,-1]],],
+                     [[10,11,11,11,20],
+                      [10, 1,22,00,-1],
+                      [-1,00,-1,-1,-1]],],
 
                     [[[10,11,11,20],
                      [-1,12,11,20],
-                     [-1,10,1,20],
+                     [-1,10, 1,20],
                      [-1,-1,00,-1],],
 
                     [[10,11,11,20],
-                     [-1,12,1,20],
+                     [-1,12, 1,20],
                      [-1,10,11,20],
                      [-1,-1,00,-1],],
 
-                    [[10,11,1,20],
+                    [[10,11, 1,20],
                      [-1,12,11,20],
                      [-1,10,11,20],
                      [-1,-1,00,-1],],
 
-                    [[10,1,11,20],
+                    [[10, 1,11,20],
                      [-1,12,11,20],
                      [-1,10,11,20],
                      [-1,-1,00,-1],],]]
@@ -669,109 +667,203 @@ class Piece_L(Barre):
         self.shape_result=self.shape
 
 
-class Piece_J(Barre):
+class Piece_J(Piece_Z):
     def __init__(self,surface,id,name,color=COLOR_L,x=0,y=0,debug=0):
         super().__init__(surface,id,name,color,x,y,debug)
 
         self.shape= [[-1,10,11,20],
-                     [-1,10,11,20],
-                     [10,11, 1,20],
+                     [-1,10, 1,20],
+                     [10,11,11,20],
                      [-1,00,00,-1],]
         self.shapes=[[[10,11,11,20],
+                      [10, 1,22,-1],
+                      [10,11,20,-1],
+                      [-1,00,-1,-1],],
+
+                     [[10,11, 1,11,20],
+                      [-1,00,12,11,20],
+                      [-1,-1,-1,00,-1],],
+
+                     [[-1,10,11,20],
+                      [-1,10, 1,20],
+                      [10,11,11,20],
+                      [-1,00,00,-1],],
+
+                     [[10,11,20,-1,-1],
+                      [10,11, 1,11,20],
+                      [-1,00,00,00,-1],],]
+        self.shapes_alternative=[[[[10,11,11,20],
                       [10,11,22,-1],
                       [10, 1,20,-1],
                       [-1,00,-1,-1],],
 
+                     [[10,11,11,20],
+                      [10, 1,22,-1],
+                      [10,11,20,-1],
+                      [-1,00,-1,-1],],
 
-                     [[10,11,20,-1],
-                     [10,11,20,-1],
-                     [10, 1,11,20],
-                     [-1,00,00,-1],],
+                     [[10, 1,11,20],
+                      [10,11,22,-1],
+                      [10,11,20,-1],
+                      [-1,00,-1,-1],],
+
+                     [[10,11, 1,20],
+                      [10,11,22,-1],
+                      [10,11,20,-1],
+                      [-1,00,-1,-1],],],
+
+                    [[[10, 1,11,11,20],
+                      [-1,00,12,11,20],
+                      [-1,-1,-1,00,-1],],
+
+                    [[10,11, 1,11,20],
+                      [-1,00,12,11,20],
+                      [-1,-1,-1,00,-1],],
+
+                    [[10,11,11, 1,20],
+                      [-1,00,12,11,20],
+                      [-1,-1,-1,00,-1],],
+
+                    [[10,11,11,11,20],
+                      [-1,00,12, 1,20],
+                      [-1,-1,-1,00,-1],],],
+
+                    [[[-1,10, 1,20],
+                      [-1,10,11,20],
+                      [10,11,11,20],
+                      [-1,00,00,-1],],
 
                      [[-1,10,11,20],
-                     [-1,10,11,20],
-                     [10,11, 1,20],
-                     [-1,00,00,-1],],
+                      [-1,10, 1,20],
+                      [10,11,11,20],
+                      [-1,00,00,-1],],
 
-                     [[10,11,11,20],
-                     [-1,12,11,20],
-                     [-1,10, 1,20],
-                     [-1,-1,00,-1],],]
-        self.shapes_alternative=[[[[10,11,20,-1,-1],
+                     [[-1,10,11,20],
+                      [-1,10,11,20],
+                      [10,11, 1,20],
+                      [-1,00,00,-1],],
+
+                     [[-1,10,11,20],
+                      [-1,10,11,20],
+                      [10, 1,11,20],
+                      [-1,00,00,-1],],],
+
+                    [[[10,11,20,-1,-1],
+                      [10,11,11, 1,20],
+                      [-1,00,00,00,-1],],
+
+                    [[10,11,20,-1,-1],
                       [10,11, 1,11,20],
-                      [-1,00,00,00,-1]],
+                      [-1,00,00,00,-1],],
 
-                     [[10,11,20,-1,-1],
-                      [10,1, 11,11,20],
-                      [-1,00,00,00,-1]],
+                    [[10,11,20,-1,-1],
+                      [10, 1,11,11,20],
+                      [-1,00,00,00,-1],],
 
-                     [[10,1,20,-1,-1],
-                      [10,11, 11,11,20],
-                      [-1,00,00,00,-1]],
-
-                     [[10,11,20,-1,-1],
-                      [10,11, 11,1,20],
-                      [-1,00,00,00,-1]]],
-
-                    [[[10,11,20,-1],
-                     [10,11,20,-1],
-                     [10, 1,11,20],
-                     [-1,00,00,-1],],
-
-                    [[10,11,20,-1],
-                     [10,11,20,-1],
-                     [10,11,1,20],
-                     [-1,00,00,-1],],
-
-                    [[10,11,20,-1],
-                     [10,1,20,-1],
-                     [10,11,11,20],
-                     [-1,00,00,-1],],
-
-                    [[10,1,20,-1],
-                     [10,11,20,-1],
-                     [10,11,11,20],
-                     [-1,00,00,-1],],],
-
-                    [[[-1,-1,10,11,20],
-                      [10,11,1,11,20],
-                      [-1,00,00,00,-1]],
-
-                     [[-1,-1,10,11,20],
-                      [10,11,11,1,20],
-                      [-1,00,00,00,-1]],
-
-                     [[-1,-1,10,1,20],
+                    [[10, 1,20,-1,-1],
                       [10,11,11,11,20],
-                      [-1,00,00,00,-1]],
-
-                     [[-1,-1,10,11,20],
-                      [10,1,11,11,20],
-                      [-1,00,00,00,-1]],],
-
-                    [[[10,11,11,20],
-                     [-1,12,11,20],
-                     [-1,10,1,20],
-                     [-1,-1,00,-1],],
-
-                    [[10,11,11,20],
-                     [-1,12,1,20],
-                     [-1,10,11,20],
-                     [-1,-1,00,-1],],
-
-                    [[10,11,1,20],
-                     [-1,12,11,20],
-                     [-1,10,11,20],
-                     [-1,-1,00,-1],],
-
-                    [[10,1,11,20],
-                     [-1,12,11,20],
-                     [-1,10,11,20],
-                     [-1,-1,00,-1],],]]
+                      [-1,00,00,00,-1],],]]
         self.shapeNumber=1
         self.shape_result=self.shape
 
+class Piece_T(Piece_Z):
+    def __init__(self,surface,id,name,color=COLOR_L,x=0,y=0,debug=0):
+        super().__init__(surface,id,name,color,x,y,debug)
 
+        self.shape= [[10,11,20,-1],
+                     [10, 1,11,20],
+                     [10,11,22,-1],
+                     [-1,00,-1,-1],]
+        self.shapes=[[[-1,10,11,20,-1],
+                      [10,11, 1,11,20],
+                      [-1,00,00,00,-1],],
+
+                     [[10,11,20,-1],
+                     [10, 1,11,20],
+                     [10,11,22,-1],
+                     [-1,00,-1,-1],],
+
+                     [[10,11, 1,11,20],
+                      [-1,12,11,22,-1],
+                      [-1,-1,00,-1,-1],],
+
+                     [[-1,10,11,20],
+                      [10,11, 1,20],
+                      [-1,12,11,20],
+                      [-1,-1,00-1],],]
+        self.shapes_alternative=[[[[-1,10,11,20,-1],
+                      [10,11, 1,11,20],
+                      [-1,00,00,00,-1],],
+
+                     [[-1,10, 1,20,-1],
+                      [10,11,11,11,20],
+                      [-1,00,00,00,-1],],
+
+                     [[-1,10,11,20,-1],
+                      [10,11,11, 1,20],
+                      [-1,00,00,00,-1],],
+
+                     [[-1,10,11,20,-1],
+                      [10, 1,11,11,20],
+                      [-1,00,00,00,-1],],],
+
+                    [[[10,11,20,-1],
+                     [10, 1,11,20],
+                     [10,11,22,-1],
+                     [-1,00,-1,-1],],
+
+                    [[10,11,20,-1],
+                     [10,11, 1,20],
+                     [10,11,22,-1],
+                     [-1,00,-1,-1],],
+
+                    [[10, 1,20,-1],
+                     [10,11,11,20],
+                     [10,11,22,-1],
+                     [-1,00,-1,-1],],
+
+                    [[10,11,20,-1],
+                     [10,11,11,20],
+                     [10, 1,22,-1],
+                     [-1,00,-1,-1],],],
+
+                    [[[10,11, 1,11,20],
+                      [-1,12,11,22,-1],
+                      [-1,-1,00,-1,-1],],
+
+                     [[10,11,11, 1,20],
+                      [-1,12,11,22,-1],
+                      [-1,-1,00,-1,-1],],
+
+                     [[10, 1,11,11,20],
+                      [-1,12,11,22,-1],
+                      [-1,-1,00,-1,-1],],
+
+                    [[10,11,11,11,20],
+                      [-1,12, 1,22,-1],
+                      [-1,-1,00,-1,-1],],],
+
+                    [[[-1,10,11,20],
+                      [10,11, 1,20],
+                      [-1,12,11,20],
+                      [-1,-1,00-1],],
+
+                    [[-1,10,11,20],
+                      [10,1,11,20],
+                      [-1,12,11,20],
+                      [-1,-1,00-1],],
+
+                    [[-1,10, 1,20],
+                      [10,11,11,20],
+                      [-1,12,11,20],
+                      [-1,-1,00-1],],
+
+                    [[-1,10,11,20],
+                      [10,11,11,20],
+                      [-1,12, 1,20],
+                      [-1,-1,00-1],],]]
+        self.shapeNumber=1
+        self.shape_result=self.shape
 
 if __name__=="__main__":
     x=8
@@ -812,7 +904,7 @@ if __name__=="__main__":
         time.sleep(1)
         if piece.movetesting(cuvette)["s"]:
             piece.move("s")
-            print("move", piece.get_coordp())
+            #print("move", piece.get_coordp())
         else:
             pxpyp=piece.get_coordp()
             cuvette[pxpyp[0]][pxpyp[1]]=piece
