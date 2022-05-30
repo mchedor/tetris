@@ -5,7 +5,8 @@ from random import *
 import tetris_piece as tp
 import time
 
-
+combo=0
+point=0
 x=10
 y=22
 xp=x*32+32
@@ -18,7 +19,7 @@ COLOR_CUVETTE=(127, 127, 127)
 pieces=("""tp.Barre(fenetre,8,"piece",x=4,y=1)""","""tp.Carre(fenetre,8,"piece",x=4,y=1)""","""tp.Piece_S(fenetre,8,"piece",x=4,y=1)""","""tp.Piece_Z(fenetre,8,"piece",x=4,y=1)""","""tp.Piece_L(fenetre,8,"piece",x=4,y=1)""","""tp.Piece_J(fenetre,8,"piece",x=4,y=1)""","""tp.Piece_T(fenetre,8,"piece",x=4,y=1)""")
 
 #pieces=("""tp.Piece_L(fenetre,8,"piece",x=4,y=1)""","""tp.Piece_L(fenetre,8,"piece",x=4,y=1)""")
-
+police = pygame.font.SysFont("monospace" ,30)
 
 cuvette=[[0,0,0,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0,0],
@@ -53,7 +54,9 @@ for i in range(len(cuvette)):
             cuvette_obj_piece[i].append(0)
 
 
-
+def affiche_points():
+    image_texte = police.render ( "Points : "+str(point), 1 , (255,0,0) )
+    fenetre.blit(image_texte, (xp-150,40))
 def choicePiece():
     global piece
     seed()
@@ -68,7 +71,7 @@ def choicePiece():
 
 piece=choicePiece()
 piece.draw()
-
+affiche_points()
 pygame.display.flip()
 montps=time.time()
 ev=[]
@@ -142,6 +145,7 @@ while continuer and fin==False:
 
     if time.time()-montps>=0.7:
         #on defini un tic
+        combo-=1
         montps=time.time()
         if piece.movetesting(cuvette_obj_piece)["s"]:
             mouvement+="s"
@@ -165,6 +169,8 @@ while continuer and fin==False:
             for j in i:
                 if j:
                     j.draw()
+        affiche_points()
+
         pygame.display.flip()
 
 
@@ -173,16 +179,20 @@ while continuer and fin==False:
                 ligne=i
                 #print(cuvette_obj_piece[i])
         if ligne:
+            if combo<0:
+                combo=0
             for i in cuvette_obj_piece[ligne]:
                 if int(i)==2:
                     i.destroy()
+                    point+=1*(combo+1)
                 else:
                     #print(int(i))
                     pass
                 pygame.display.flip()
-                time.sleep(0.05)
+                time.sleep(0.04 )
             cuvette_obj_piece.insert(HAUT_DE_CUVETTE,[cuvette_obj_piece[ligne][0]]+[i*0 for i in range(len(cuvette_obj_piece[ligne])-2)]+[cuvette_obj_piece[ligne][-1]])
-            #print(cuvette_obj_piece.pop(ligne+1))
+            cuvette_obj_piecepop=cuvette_obj_piece.pop(ligne+1)
+            #print(cuvette_obj_piece.pop)
 
             #print(cuvette_obj_piece)
             #print()
@@ -198,11 +208,12 @@ while continuer and fin==False:
                         cuvette_obj_piece[i][j].set_coordp(j,i)
                         cuvette_obj_piece[i][j].draw()
             pygame.display.flip()
+            combo+=1
             #print("l",len(cuvette_obj_piece))
     if [True for i,x in enumerate(cuvette_obj_piece[1]) if x]:
         fin=True
     seed()
     time.sleep(0.1)
 
-#print("\n".join([str(i) for i in cuvette_obj_piece]))
+print("\n".join([str(i) for i in cuvette_obj_piece]))
 pygame.quit()
